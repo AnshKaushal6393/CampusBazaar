@@ -1,20 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product, FilterOptions } from '../types';
 import { mockProducts } from '../data/mockData';
-
-interface ProductContextType {
-  products: Product[];
-  filteredProducts: Product[];
-  setFilterOptions: (options: FilterOptions) => void;
-  filterOptions: FilterOptions;
-  addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'seller'>) => Promise<void>;
-  markAsSold: (productId: string) => Promise<void>;
-  getProductById: (id: string) => Product | undefined;
-  getUserProducts: (userId: string) => Product[];
-  isLoading: boolean;
-}
-
-const ProductContext = createContext<ProductContextType | undefined>(undefined);
+import { ProductContext } from './product-context';
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -136,12 +123,4 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
       {children}
     </ProductContext.Provider>
   );
-};
-
-export const useProducts = () => {
-  const context = useContext(ProductContext);
-  if (context === undefined) {
-    throw new Error('useProducts must be used within a ProductProvider');
-  }
-  return context;
 };

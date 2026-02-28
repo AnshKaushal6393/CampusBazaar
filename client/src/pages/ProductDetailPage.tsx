@@ -1,65 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { MessageCircle, Tag, Clock } from 'lucide-react';
+import toast from 'react-hot-toast';
 import Layout from '../components/layout/Layout';
-import ConversationList from '../components/messaging/ConversationList';
-import ChatInterface from '../components/messaging/ChatInterface';
-import { useChat } from '../context/ChatContext';
-import { useAuth } from '../context/AuthContext';
-import { Conversation } from '../types';
+import Button from '../components/common/Button';
+import { useProducts } from '../context/useProducts';
+import { useAuth } from '../context/useAuth';
+import { useChat } from '../context/useChat';
+import { formatCurrency } from '../utils/formatCurrency';
 
-const MessagesPage: React.FC = () => {
-  const location = useLocation();
-  const { conversations, activeConversation, setActiveConversation, messages, sendMessage, isLoading } = useChat();
-  const { user } = useAuth();
-  
-  // Extract conversation ID from URL if present
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const conversationId = searchParams.get('conversation');
-    
-    if (conversationId && conversations.length > 0) {
-      const conversation = conversations.find(conv => conv.id === conversationId);
-      if (conversation) {
-        setActiveConversation(conversation);
-      }
-    } else if (conversations.length > 0 && !activeConversation) {
-      // Set first conversation as active if none is selected
-      setActiveConversation(conversations[0]);
+const ProductDetailPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { getProductById, markAsSold, isLoading } = useProducts();
+  const { user, isAuthenticated } = useAuth();
+  const { startNewConversation } = useChat();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const product = id ? getProductById(id) : undefined;
+
+  const handleMessageSeller = async () => {
+    if (!product || !isAuthenticated || !user) {
+      navigate('/login', { state: { from: `/products/${id}` } });
+      return;
     }
-  }, [location.search, conversations, activeConversation, setActiveConversation]);
 
-  const handleSelectConversation = (conversation: Conversation) => {
-    setActiveConversation(conversation);
+    if (user.id === product.seller.id) {
+      toast.error('You cannot message yourself for your own listing.');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const conversationId = await startNewConversation(product.id, product.seller.id);
+      navigate(`/messages?conversation=${conversationId}`);
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+      toast.error('Could not open chat. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleSendMessage = async (content: string) => {
-    await sendMessage(content);
+  const handleMarkAsSold = async () => {
+    if (!product) return;
+    try {
+      setIsSubmitting(true);
+      await markAsSold(product.id);
+      toast.success('Listing marked as sold.');
+    } catch (error) {
+      console.error('Failed to mark item as sold:', error);
+      toast.error('Could not update listing status.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-12 text-center text-gray-600">Loading product...</div>
+      </Layout>
+    );
+  }
+
+  if (!product) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-12 text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Product Not Found</h1>
+          <p className="text-gray-600 mt-2">This listing may have been removed.</p>
+          <Link to="/products" className="inline-block mt-4 text-emerald-600 hover:text-emerald-700 font-medium">
+            Back to products
+          </Link>
+        </div>
+      </Layout>
+    );
+  }
+
+  const isOwner = user?.id === product.seller.id;
+  const primaryImage =
+    product.images?.[0] ||
+    'https://images.pexels.com/photos/3651597/pexels-photo-3651597.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Messages</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(80vh-4rem)]">
-          <div className="lg:col-span-1 h-full">
-            <ConversationList
-              conversations={conversations}
-              activeConversation={activeConversation}
-              currentUser={user}
-              onSelectConversation={handleSelectConversation}
-              isLoading={isLoading}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <img src={primaryImage} alt={product.title} className="w-full h-[420px] object-cover" />
           </div>
-          
-          <div className="lg:col-span-2 h-full">
-            <ChatInterface
-              conversation={activeConversation}
-              messages={messages}
-              currentUser={user}
-              onSendMessage={handleSendMessage}
-              isLoading={isLoading}
-            />
+
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">{product.title}</h1>
+              <p className="text-2xl font-semibold text-emerald-600 mt-2">
+                {product.isFree ? 'FREE' : formatCurrency(product.price)}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              <span className="inline-flex items-center">
+                <Tag className="h-4 w-4 mr-1" />
+                <span className="capitalize">{product.category}</span>
+              </span>
+              <span className="inline-flex items-center">
+                <Clock className="h-4 w-4 mr-1" />
+                {new Date(product.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-5">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+              <p className="text-gray-700 leading-relaxed">{product.description}</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img
+                  src={
+                    product.seller.avatar ||
+                    'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=100'
+                  }
+                  alt={product.seller.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-medium text-gray-900">{product.seller.name}</p>
+                  <p className="text-sm text-gray-600">{product.college}</p>
+                </div>
+              </div>
+
+              {isOwner ? (
+                <Button
+                  variant="outline"
+                  onClick={handleMarkAsSold}
+                  disabled={isSubmitting || product.isSold}
+                >
+                  {product.isSold ? 'Already Sold' : 'Mark as Sold'}
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  icon={<MessageCircle className="h-4 w-4" />}
+                  onClick={handleMessageSeller}
+                  disabled={isSubmitting || product.isSold}
+                >
+                  {product.isSold ? 'Item Sold' : 'Message Seller'}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -67,4 +157,4 @@ const MessagesPage: React.FC = () => {
   );
 };
 
-export default MessagesPage;
+export default ProductDetailPage;

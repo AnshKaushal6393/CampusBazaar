@@ -1,19 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChatMessage, Conversation, User } from '../types';
 import { mockConversations, mockMessages } from '../data/mockData';
-import { useAuth } from './AuthContext';
-
-interface ChatContextType {
-  conversations: Conversation[];
-  activeConversation: Conversation | null;
-  messages: ChatMessage[];
-  setActiveConversation: (conversation: Conversation | null) => void;
-  sendMessage: (content: string) => Promise<void>;
-  startNewConversation: (productId: string, sellerId: string) => Promise<string>;
-  isLoading: boolean;
-}
-
-const ChatContext = createContext<ChatContextType | undefined>(undefined);
+import { useAuth } from './useAuth';
+import { ChatContext } from './chat-context';
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
@@ -163,12 +152,4 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </ChatContext.Provider>
   );
-};
-
-export const useChat = () => {
-  const context = useContext(ChatContext);
-  if (context === undefined) {
-    throw new Error('useChat must be used within a ChatProvider');
-  }
-  return context;
 };

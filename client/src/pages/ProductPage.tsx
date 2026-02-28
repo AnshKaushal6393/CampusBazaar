@@ -3,13 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ProductList from '../components/products/ProductList';
 import ProductFilter from '../components/products/ProductFilter';
-import { useProducts } from '../context/ProductContext';
+import { useProducts } from '../context/useProducts';
 import { FilterOptions, ProductCategory } from '../types';
 
 const ProductsPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { filteredProducts, setFilterOptions, filterOptions, isLoading } = useProducts();
+  const { filteredProducts, setFilterOptions, isLoading } = useProducts();
   const [initialFilters, setInitialFilters] = useState<FilterOptions>({});
 
   // Parse query parameters on mount and when location changes
@@ -99,8 +99,9 @@ const ProductsPage: React.FC = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Browse Products</h1>
-          <p className="text-gray-600">
+          <p className="paper-tag mb-2">Campus Noticeboard</p>
+          <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Browse Products</h1>
+          <p className="text-[var(--color-muted)]">
             Find what you need from fellow students at your campus
           </p>
         </div>

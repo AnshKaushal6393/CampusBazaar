@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ProductProvider } from "./context/ProductContext";
 import { ChatProvider } from "./context/ChatContext";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./context/useAuth";
 import ErrorBoundary from "./utils/ErrorBoundary"; 
 import { Toaster } from "react-hot-toast";
 

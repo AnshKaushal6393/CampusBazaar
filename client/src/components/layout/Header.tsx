@@ -9,7 +9,7 @@ import {
     PlusCircle,
     Home,
   } from "lucide-react";
-  import { useAuth } from "../../context/AuthContext";
+  import { useAuth } from "../../context/useAuth";
   import { Link, useNavigate, useLocation } from "react-router-dom";
   import { useState } from "react";
   import clsx from "clsx";
@@ -42,7 +42,7 @@ import {
     };
   
     return (
-      <header className="bg-emerald-600 text-white sticky top-0 z-50 shadow-md">
+      <header className="nav-shell text-white sticky top-0 z-50 shadow-xl shadow-black/10">
         <div className="max-w-7xl flex items-center justify-between md:px-8 mx-auto px-4 py-3">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 text-white">
@@ -61,7 +61,7 @@ import {
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-full py-2 px-4 pr-10 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full py-2 px-4 pr-10 rounded-full text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -83,7 +83,7 @@ import {
                 <Link
                   to="/dashboard"
                   className={clsx(
-                    "hover:text-emerald-200 transition-colors",
+                    "hover:text-amber-100 transition-colors",
                     isActive("/dashboard") && "underline font-semibold"
                   )}
                 >
@@ -92,7 +92,7 @@ import {
                 <Link
                   to="/messages"
                   className={clsx(
-                    "hover:text-emerald-200 transition-colors",
+                    "hover:text-amber-100 transition-colors",
                     isActive("/messages") && "underline font-semibold"
                   )}
                 >
@@ -101,8 +101,8 @@ import {
                 <Link
                   to="/sell"
                   className={clsx(
-                    "bg-white text-emerald-600 px-4 py-2 rounded-full font-medium transition-colors",
-                    isActive("/sell") && "bg-emerald-100 text-emerald-700"
+                    "bg-white text-[var(--color-brand-strong)] px-4 py-2 rounded-full font-medium transition-colors",
+                    isActive("/sell") && "bg-[var(--color-brand-soft)] text-[var(--color-brand-strong)]"
                   )}
                 >
                   Sell Item
@@ -111,7 +111,7 @@ import {
                   <button
                     title="User Menu"
                     aria-label="User Menu"
-                    className="flex items-center space-x-1 hover:text-emerald-200 transition-colors"
+                    className="flex items-center space-x-1 hover:text-amber-100 transition-colors"
                   >
                     <span className="hidden sm:inline">
                       {user?.name?.split(" ")[0]}
@@ -135,26 +135,6 @@ import {
                     >
                       Profile
                     </Link>
-                    <Link
-                      to="/my-listings"
-                      className={clsx(
-                        "block px-4 py-2 hover:bg-gray-100",
-                        isActive("/my-listings") && "bg-gray-100 font-semibold"
-                      )}
-                    >
-                      My Listings
-                    </Link>
-                    {user?.isAdmin && (
-                      <Link
-                        to="/admin"
-                        className={clsx(
-                          "block px-4 py-2 hover:bg-gray-100",
-                          isActive("/admin") && "bg-gray-100 font-semibold"
-                        )}
-                      >
-                        Admin Panel
-                      </Link>
-                    )}
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
@@ -169,7 +149,7 @@ import {
                 <Link
                   to="/login"
                   className={clsx(
-                    "hover:text-emerald-200 transition-colors",
+                    "hover:text-amber-100 transition-colors",
                     isActive("/login") && "underline font-semibold"
                   )}
                 >
@@ -178,8 +158,8 @@ import {
                 <Link
                   to="/register"
                   className={clsx(
-                    "bg-white text-emerald-600 px-4 py-2 rounded-full font-medium hover:bg-emerald-100 transition-colors",
-                    isActive("/register") && "bg-emerald-100 text-emerald-700"
+                    "bg-white text-[var(--color-brand-strong)] px-4 py-2 rounded-full font-medium hover:bg-[var(--color-brand-soft)] transition-colors",
+                    isActive("/register") && "bg-[var(--color-brand-soft)] text-[var(--color-brand-strong)]"
                   )}
                 >
                   Sign Up
@@ -192,7 +172,7 @@ import {
           <button
             title={isMenuOpen ? "Close Menu" : "Open Menu"}
             aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
-            className="md:hidden p-2 rounded-md hover:bg-emerald-700 focus:ring-2 focus:ring-white"
+            className="md:hidden p-2 rounded-md hover:bg-black/15 focus:ring-2 focus:ring-white"
             onClick={toggleMenu}
           >
             {isMenuOpen ? (
@@ -225,7 +205,7 @@ import {
                   <input
                     type="text"
                     placeholder="Search products..."
-                    className="w-full py-2 px-4 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full py-2 px-4 pr-10 border rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -283,8 +263,8 @@ import {
                     <Link
                       to="/sell"
                       className={clsx(
-                        "flex items-center gap-2 p-2 rounded-md text-white bg-emerald-600",
-                        isActive("/sell") && "bg-emerald-700"
+                        "flex items-center gap-2 p-2 rounded-md text-white bg-[var(--color-brand)]",
+                        isActive("/sell") && "bg-[var(--color-brand-strong)]"
                       )}
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -303,32 +283,6 @@ import {
                       <UserIcon className="h-5 w-5" />
                       <span>Profile</span>
                     </Link>
-  
-                    <Link
-                      to="/my-listings"
-                      className={clsx(
-                        "flex items-center gap-2 p-2 rounded-md",
-                        isActive("/my-listings") ? "bg-gray-200" : "hover:bg-gray-100"
-                      )}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <ShoppingBag className="h-5 w-5" />
-                      <span>My Listings</span>
-                    </Link>
-  
-                    {user?.isAdmin && (
-                      <Link
-                        to="/admin"
-                        className={clsx(
-                          "flex items-center gap-2 p-2 rounded-md",
-                          isActive("/admin") ? "bg-gray-200" : "hover:bg-gray-100"
-                        )}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <UserIcon className="h-5 w-5" />
-                        <span>Admin Panel</span>
-                      </Link>
-                    )}
   
                     <button
                       onClick={handleLogout}
@@ -355,8 +309,8 @@ import {
                     <Link
                       to="/register"
                       className={clsx(
-                        "flex items-center gap-2 p-2 rounded-md bg-emerald-600 text-white",
-                        isActive("/register") && "bg-emerald-700"
+                        "flex items-center gap-2 p-2 rounded-md bg-[var(--color-brand)] text-white",
+                        isActive("/register") && "bg-[var(--color-brand-strong)]"
                       )}
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -377,7 +331,7 @@ import {
                         "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=100"
                       }
                       alt={user?.name}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-[var(--color-brand)]"
                     />
                     <div>
                       <p className="font-medium">{user?.name}</p>

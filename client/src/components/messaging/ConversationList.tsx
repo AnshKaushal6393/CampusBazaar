@@ -1,81 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Conversation, User } from '../../types';
 import { Search, PlusCircle } from 'lucide-react';
 
 interface ConversationListProps {
+  conversations: Conversation[];
   activeConversation: Conversation | null;
   currentUser: User | null;
   onSelectConversation: (conversation: Conversation) => void;
+  isLoading?: boolean;
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
+  conversations,
   activeConversation,
   currentUser,
   onSelectConversation,
+  isLoading = false,
 }) => {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  // WebSocket ref (optional to disconnect later)
-  const socketRef = React.useRef<WebSocket | null>(null);
-
-  // Fetch conversations initially
-  useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const response = await fetch('/api/conversations'); // your API endpoint
-        const data = await response.json();
-        setConversations(data);
-      } catch (error) {
-        console.error('Failed to fetch conversations:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchConversations();
-  }, []);
-
-  // WebSocket for real-time updates
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const socket = new WebSocket(`wss://your-backend-url/ws/conversations?userId=${currentUser.id}`);
-    socketRef.current = socket;
-
-    socket.onopen = () => {
-      console.log('WebSocket connection established');
-    };
-
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-
-      if (message.type === 'NEW_CONVERSATION') {
-        setConversations(prev => [message.conversation, ...prev]);
-      }
-      if (message.type === 'UPDATE_CONVERSATION') {
-        setConversations(prev => prev.map(conv =>
-          conv.id === message.conversation.id ? message.conversation : conv
-        ));
-      }
-      if (message.type === 'DELETE_CONVERSATION') {
-        setConversations(prev => prev.filter(conv => conv.id !== message.conversationId));
-      }
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [currentUser]);
 
   // Filter conversations by search query
   const filteredConversations = conversations.filter(conv => {
@@ -107,20 +49,20 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-lg shadow-sm overflow-hidden">
+    <div className="w-full h-full flex flex-col note-card overflow-hidden">
       {/* Search and New Message */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b border-[var(--color-border)]">
         <div className="relative mb-4">
           <input
             type="text"
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full py-2 px-4 pl-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="campus-input rounded-full pl-10"
           />
-          <Search className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
+          <Search className="absolute left-3 top-2.5 text-[var(--color-muted)] h-5 w-5" />
         </div>
-        <button className="w-full flex items-center justify-center space-x-2 bg-emerald-500 text-white py-2 px-4 rounded-full hover:bg-emerald-600 transition-colors">
+        <button className="w-full flex items-center justify-center space-x-2 bg-[var(--color-brand)] text-white py-2 px-4 rounded-full hover:bg-[var(--color-brand-strong)] transition-colors">
           <PlusCircle className="h-5 w-5" />
           <span>New Message</span>
         </button>
@@ -142,10 +84,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
           </div>
         ) : filteredConversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-            <p className="text-gray-500">No conversations found</p>
+            <p className="text-[var(--color-muted)]">No conversations found</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-[var(--color-border)]/70">
             {filteredConversations.map(conversation => {
               const otherParticipant = getOtherParticipant(conversation);
               const isActive = activeConversation?.id === conversation.id;
@@ -154,8 +96,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
                 <button
                   key={conversation.id}
                   onClick={() => onSelectConversation(conversation)}
-                  className={`w-full flex items-start p-4 text-left hover:bg-gray-50 transition-colors ${
-                    isActive ? 'bg-gray-50' : ''
+                  className={`w-full flex items-start p-4 text-left hover:bg-[var(--color-brand-soft)]/35 transition-colors ${
+                    isActive ? 'bg-[var(--color-brand-soft)]/55' : ''
                   }`}
                 >
                   <div className="relative flex-shrink-0">
@@ -173,18 +115,18 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
                   <div className="ml-3 flex-1 overflow-hidden">
                     <div className="flex justify-between items-baseline">
-                      <h3 className={`font-medium truncate ${conversation.unreadCount > 0 ? 'text-gray-900' : 'text-gray-700'}`}>
+                      <h3 className={`font-medium truncate ${conversation.unreadCount > 0 ? 'text-[var(--color-ink)]' : 'text-[var(--color-muted)]'}`}>
                         {otherParticipant?.name}
                       </h3>
                       {conversation.lastMessage && (
-                        <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                        <span className="text-xs text-[var(--color-muted)] whitespace-nowrap ml-2">
                           {formatTime(conversation.lastMessage.timestamp)}
                         </span>
                       )}
                     </div>
 
                     <p className={`text-sm truncate mt-1 ${
-                      conversation.unreadCount > 0 ? 'text-gray-900 font-medium' : 'text-gray-500'
+                      conversation.unreadCount > 0 ? 'text-[var(--color-ink)] font-medium' : 'text-[var(--color-muted)]'
                     }`}>
                       {conversation.lastMessage
                         ? truncateText(conversation.lastMessage.content, 40)

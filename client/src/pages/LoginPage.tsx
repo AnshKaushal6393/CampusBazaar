@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import toast from 'react-hot-toast';
 
 const LoginPage: React.FC = () => {
@@ -34,24 +34,32 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link to="/" className="flex items-center justify-center text-emerald-600 mb-5">
-          <ShoppingBag className="h-10 w-10" />
-        </Link>
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">
-          Welcome to CampusBazaar
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Your campus marketplace for buying and selling
-        </p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="brand-gradient rounded-3xl p-8 text-white relative overflow-hidden hidden lg:flex flex-col justify-between">
+          <div className="absolute -right-12 -top-10 w-40 h-40 rounded-full bg-white/10" />
+          <div>
+            <span className="accent-pill">Campus Community</span>
+            <h2 className="text-4xl font-extrabold mt-6 leading-tight">Log in and continue trading smarter on campus.</h2>
+            <p className="text-white/85 mt-4">Connect with nearby students, save money, and keep good items in circulation.</p>
+          </div>
+          <div className="note-card p-4 text-[var(--color-ink)]">
+            <p className="text-sm font-semibold">Tip: Use your college email for better trust.</p>
+          </div>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow rounded-lg">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="notebook-panel p-7 sm:p-9">
+          <Link to="/" className="inline-flex items-center gap-2 text-[var(--color-brand)] font-semibold mb-4">
+            <ShoppingBag className="h-6 w-6" />
+            CampusBazaar
+          </Link>
+          <p className="paper-tag">Welcome Back</p>
+          <h1 className="text-3xl font-extrabold text-[var(--color-ink)] mt-3">Sign in to your account</h1>
+          <p className="text-[var(--color-muted)] text-sm mt-2">Your campus marketplace is one step away.</p>
+
+          <form className="space-y-5 mt-7" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-semibold text-[var(--color-ink)] mb-1">
                 Email Address
               </label>
               <input
@@ -62,12 +70,12 @@ const LoginPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                className="campus-input"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-semibold text-[var(--color-ink)] mb-1">
                 Password
               </label>
               <input
@@ -78,23 +86,21 @@ const LoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                className="campus-input"
               />
             </div>
 
-            <div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-              >
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full rounded-xl py-2.5 font-bold text-white bg-[var(--color-brand)] hover:bg-[var(--color-brand-strong)] transition"
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
+            </button>
 
-            <div className="text-center text-sm mt-4">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-emerald-600 hover:text-emerald-500 font-medium">
+            <div className="text-center text-sm text-[var(--color-muted)] pt-2">
+              Don&apos;t have an account?{' '}
+              <Link to="/register" className="text-[var(--color-brand)] hover:text-[var(--color-brand-strong)] font-semibold">
                 Register
               </Link>
             </div>

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
 import Button from '../components/common/Button';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 const ProfileSetupPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
 
   const [formData, setFormData] = useState({
     college: user?.college || '',
-    phoneNumber: '',
-    address: '',
+    phoneNumber: user?.phoneNumber || '',
+    address: user?.address || '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,14 +21,11 @@ const ProfileSetupPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const updatedUser = {
-        ...user,
+      updateProfile({
         college: formData.college,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
-      };
-
-      localStorage.setItem('campusbazaar_user', JSON.stringify(updatedUser));
+      });
 
       navigate('/profile');
     } catch (error) {

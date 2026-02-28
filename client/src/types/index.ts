@@ -4,7 +4,11 @@ export interface User {
   name: string;
   email: string;
   college: string;
-  avatar?: string | null;  // avatar can be optional or explicitly null
+  collegeId?: string;
+  avatar?: string | null;
+  phoneNumber?: string;
+  address?: string;
+  password?: string;
   isAdmin: boolean;
 }
 

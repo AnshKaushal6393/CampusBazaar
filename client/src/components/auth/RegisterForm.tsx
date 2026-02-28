@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
+interface LocalRegisterUser {
+  name: string;
+  email: string;
+  password: string;
+  college: string;
+  collegeId: string;
+  avatar: string;
+}
+
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -20,9 +29,9 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("campusbazaar-users") || "[]");
+    const users = JSON.parse(localStorage.getItem("campusbazaar-users") || "[]") as LocalRegisterUser[];
 
-    const userExists = users.some((user: any) => user.email === formData.email);
+    const userExists = users.some((user) => user.email === formData.email);
     if (userExists) {
       toast.error("A user with this email already exists.");
       return;

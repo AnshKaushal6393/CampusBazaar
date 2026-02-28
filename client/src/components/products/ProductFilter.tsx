@@ -43,28 +43,47 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
     setSearch(initialFilters.search || '');
   }, [initialFilters]);
 
-  const handleFilterChange = (key: keyof FilterOptions, value: any) => {
+  const handleFilterChange = (
+    key: keyof FilterOptions,
+    value: FilterOptions[keyof FilterOptions]
+  ) => {
     const updated = { ...filters, [key]: value };
     setFilters(updated);
   };
 
   const handlePriceChange = () => {
     const updated = { ...filters };
-    minPrice ? (updated.minPrice = parseFloat(minPrice)) : delete updated.minPrice;
-    maxPrice ? (updated.maxPrice = parseFloat(maxPrice)) : delete updated.maxPrice;
+    if (minPrice) {
+      updated.minPrice = parseFloat(minPrice);
+    } else {
+      delete updated.minPrice;
+    }
+    if (maxPrice) {
+      updated.maxPrice = parseFloat(maxPrice);
+    } else {
+      delete updated.maxPrice;
+    }
     setFilters(updated);
   };
 
   const handleCollegeChange = () => {
     const updated = { ...filters };
-    college ? (updated.college = college) : delete updated.college;
+    if (college) {
+      updated.college = college;
+    } else {
+      delete updated.college;
+    }
     setFilters(updated);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updated = { ...filters };
-    search ? (updated.search = search) : delete updated.search;
+    if (search) {
+      updated.search = search;
+    } else {
+      delete updated.search;
+    }
     setFilters(updated);
     onFilter(updated);
   };
@@ -114,12 +133,12 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="campus-input pl-10"
           />
-          <Search className="absolute left-3 top-3.5 text-gray-400 h-5 w-5" />
+          <Search className="absolute left-3 top-3.5 text-[var(--color-muted)] h-5 w-5" />
           <button
             type="submit"
-            className="absolute right-3 top-2.5 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md"
+            className="absolute right-3 top-2.5 bg-[var(--color-brand)] hover:bg-[var(--color-brand-strong)] text-white px-3 py-1 rounded-md"
           >
             Search
           </button>
@@ -131,7 +150,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center space-x-2 px-4 py-2 rounded-md transition ${
-            hasActiveFilters() ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            hasActiveFilters() ? 'bg-[var(--color-brand-soft)] text-[var(--color-brand-strong)]' : 'bg-white text-[var(--color-ink)] border border-[var(--color-border)] hover:bg-[var(--color-brand-soft)]/60'
           }`}
         >
           <Filter className="h-5 w-5" />
@@ -148,8 +167,8 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
               }}
               className={`px-3 py-1.5 rounded-full text-sm ${
                 filters.category === cat.value
-                  ? 'bg-emerald-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-[var(--color-brand)] text-white'
+                  : 'bg-white border border-[var(--color-border)] text-[var(--color-muted)] hover:bg-[var(--color-brand-soft)]'
               }`}
             >
               {cat.label}
@@ -157,7 +176,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
           ))}
           <button
             onClick={() => setIsOpen(true)}
-            className="px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
+            className="px-3 py-1.5 rounded-full text-sm bg-white border border-[var(--color-border)] text-[var(--color-muted)] hover:bg-[var(--color-brand-soft)]"
           >
             More...
           </button>
@@ -166,10 +185,10 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
 
       {/* Filter Panel */}
       {isOpen && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="notebook-panel p-6 mb-6">
           <div className="flex justify-between mb-4">
-            <h3 className="text-lg font-semibold">Filter Products</h3>
-            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">
+            <h3 className="text-lg font-semibold text-[var(--color-ink)]">Filter Products</h3>
+            <button onClick={() => setIsOpen(false)} className="text-[var(--color-muted)] hover:text-[var(--color-ink)]">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -177,11 +196,11 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Filters */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-[var(--color-ink)] mb-2">Category</label>
               <select
                 value={filters.category || 'all'}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full p-2.5 border rounded-md focus:ring-emerald-500"
+                className="campus-input"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>
@@ -192,11 +211,11 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
+              <label className="block text-sm font-medium text-[var(--color-ink)] mb-2">Condition</label>
               <select
                 value={filters.condition || 'all'}
                 onChange={(e) => handleFilterChange('condition', e.target.value)}
-                className="w-full p-2.5 border rounded-md focus:ring-emerald-500"
+                className="campus-input"
               >
                 {CONDITIONS.map((cond) => (
                   <option key={cond.value} value={cond.value}>
@@ -207,7 +226,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+              <label className="block text-sm font-medium text-[var(--color-ink)] mb-2">Price Range</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -215,7 +234,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
                   onBlur={handlePriceChange}
-                  className="w-full p-2.5 border rounded-md focus:ring-emerald-500"
+                  className="campus-input"
                 />
                 <input
                   type="number"
@@ -223,20 +242,20 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
                   onBlur={handlePriceChange}
-                  className="w-full p-2.5 border rounded-md focus:ring-emerald-500"
+                  className="campus-input"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">College</label>
+              <label className="block text-sm font-medium text-[var(--color-ink)] mb-2">College</label>
               <input
                 type="text"
                 placeholder="Enter college"
                 value={college}
                 onChange={(e) => setCollege(e.target.value)}
                 onBlur={handleCollegeChange}
-                className="w-full p-2.5 border rounded-md focus:ring-emerald-500"
+                className="campus-input"
               />
             </div>
 
@@ -246,9 +265,9 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
                 type="checkbox"
                 checked={filters.onlyFree || false}
                 onChange={(e) => handleFilterChange('onlyFree', e.target.checked)}
-                className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                className="w-4 h-4 text-[var(--color-brand)] rounded focus:ring-[var(--color-brand)]"
               />
-              <label htmlFor="onlyFree" className="ml-2 text-sm text-gray-700">
+              <label htmlFor="onlyFree" className="ml-2 text-sm text-[var(--color-ink)]">
                 Only Free Items
               </label>
             </div>
@@ -257,13 +276,13 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter, initialFilters 
           <div className="flex justify-end mt-6 gap-4">
             <button
               onClick={resetFilters}
-              className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-[var(--color-border)] rounded-md text-[var(--color-ink)] hover:bg-[var(--color-brand-soft)]"
             >
               Reset
             </button>
             <button
               onClick={applyFilters}
-              className="px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600"
+              className="px-4 py-2 bg-[var(--color-brand)] text-white rounded-md hover:bg-[var(--color-brand-strong)]"
             >
               Apply
             </button>

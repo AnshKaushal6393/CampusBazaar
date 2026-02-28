@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AlertCircle, ImagePlus, X } from 'lucide-react';
 import Layout from '../components/layout/Layout';
 import Button from '../components/common/Button';
-import { useProducts } from '../context/ProductContext';
-import { useAuth } from '../context/AuthContext';
+import { useProducts } from '../context/useProducts';
+import { useAuth } from '../context/useAuth';
 import { ProductCategory, ProductCondition } from '../types';
 
 const SellProductPage: React.FC = () => {
@@ -144,10 +144,12 @@ const SellProductPage: React.FC = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Sell an Item</h1>
+          <p className="paper-tag mb-2">Campus Listing Desk</p>
+          <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Sell an Item</h1>
+          <p className="text-[var(--color-muted)] mb-6">Post clear details so students can trust and respond quickly.</p>
           
           {error && (
-            <div className="bg-red-50 text-red-700 p-4 rounded-md mb-6 flex items-start">
+            <div className="bg-red-50 text-red-700 p-4 rounded-md mb-6 flex items-start border border-red-200">
               <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -155,11 +157,11 @@ const SellProductPage: React.FC = () => {
           
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Item Details */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Item Details</h2>
+            <div className="notebook-panel p-6">
+              <h2 className="text-xl font-semibold text-[var(--color-ink)] mb-4">Item Details</h2>
               
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="title" className="block text-sm font-medium text-[var(--color-ink)] mb-1">
                   Title *
                 </label>
                 <input
@@ -168,14 +170,14 @@ const SellProductPage: React.FC = () => {
                   type="text"
                   value={formData.title}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="campus-input"
                   placeholder="e.g., Calculus Textbook 10th Edition"
                   required
                 />
               </div>
               
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="description" className="block text-sm font-medium text-[var(--color-ink)] mb-1">
                   Description *
                 </label>
                 <textarea
@@ -184,7 +186,7 @@ const SellProductPage: React.FC = () => {
                   rows={4}
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                  className="campus-input"
                   placeholder="Describe your item - condition, features, reason for selling, etc."
                   required
                 />
@@ -200,14 +202,14 @@ const SellProductPage: React.FC = () => {
                     onChange={handleChange}
                     className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 rounded"
                   />
-                  <label htmlFor="isFree" className="ml-2 text-sm font-medium text-gray-700">
+                  <label htmlFor="isFree" className="ml-2 text-sm font-medium text-[var(--color-ink)]">
                     This item is free (donation)
                   </label>
                 </div>
               </div>
               
               <div className="mb-4">
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="price" className="block text-sm font-medium text-[var(--color-ink)] mb-1">
                   Price *
                 </label>
                 <div className="relative rounded-md shadow-sm">
@@ -222,7 +224,7 @@ const SellProductPage: React.FC = () => {
                     step="0.01"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full pl-8 pr-4 py-2 border border-[var(--color-border)] rounded-md focus:ring-[var(--color-brand)] focus:border-[var(--color-brand)]"
                     placeholder="0.00"
                     disabled={formData.isFree}
                     required={!formData.isFree}
@@ -232,7 +234,7 @@ const SellProductPage: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="category" className="block text-sm font-medium text-[var(--color-ink)] mb-1">
                     Category *
                   </label>
                   <select
@@ -240,7 +242,7 @@ const SellProductPage: React.FC = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md focus:ring-[var(--color-brand)] focus:border-[var(--color-brand)]"
                     required
                   >
                     <option value="" disabled>Select a category</option>
@@ -255,7 +257,7 @@ const SellProductPage: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="condition" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="condition" className="block text-sm font-medium text-[var(--color-ink)] mb-1">
                     Condition *
                   </label>
                   <select
@@ -263,7 +265,7 @@ const SellProductPage: React.FC = () => {
                     name="condition"
                     value={formData.condition}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full px-4 py-2 border border-[var(--color-border)] rounded-md focus:ring-[var(--color-brand)] focus:border-[var(--color-brand)]"
                     required
                   >
                     <option value="" disabled>Select condition</option>
@@ -278,11 +280,11 @@ const SellProductPage: React.FC = () => {
             </div>
             
             {/* Images */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Images</h2>
+            <div className="note-card p-6">
+              <h2 className="text-xl font-semibold text-[var(--color-ink)] mb-4">Images</h2>
               
               <div className="mb-4">
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-[var(--color-muted)] mb-2">
                   Upload clear photos of your item. Add multiple angles to help buyers see details.
                 </p>
                 
@@ -304,9 +306,9 @@ const SellProductPage: React.FC = () => {
                     </div>
                   ))}
                   
-                  <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:bg-gray-50">
+                  <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-[var(--color-border)] rounded-md cursor-pointer hover:bg-[var(--color-brand-soft)]/40">
                     <ImagePlus className="h-8 w-8 text-gray-400" />
-                    <span className="text-xs text-gray-500 mt-1">Add Image</span>
+                    <span className="text-xs text-[var(--color-muted)] mt-1">Add Image</span>
                     <input
                       type="file"
                       accept="image/*"

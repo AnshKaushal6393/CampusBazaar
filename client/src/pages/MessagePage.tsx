@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import ConversationList from '../components/messaging/ConversationList';
 import ChatInterface from '../components/messaging/ChatInterface';
-import { useChat } from '../context/ChatContext';
-import { useAuth } from '../context/AuthContext';
+import { useChat } from '../context/useChat';
+import { useAuth } from '../context/useAuth';
 import { Conversation } from '../types';
 
 const MessagesPage: React.FC = () => {
@@ -39,7 +39,9 @@ const MessagesPage: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Messages</h1>
+        <p className="paper-tag mb-2">Campus Thread</p>
+        <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Messages</h1>
+        <p className="text-[var(--color-muted)] mb-6">Coordinate meetups and item details directly with students.</p>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(80vh-4rem)]">
           <div className="lg:col-span-1 h-full">

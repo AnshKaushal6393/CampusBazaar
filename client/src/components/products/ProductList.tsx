@@ -18,7 +18,7 @@ const ProductList: React.FC<ProductListProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {/* Skeleton loaders */}
         {Array.from({ length: 8 }).map((_, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+          <div key={index} className="note-card overflow-hidden animate-pulse">
             <div className="h-48 bg-gray-300"></div>
             <div className="p-4">
               <div className="h-5 bg-gray-300 rounded w-3/4 mb-3"></div>
@@ -37,9 +37,9 @@ const ProductList: React.FC<ProductListProps> = ({
 
   if (products.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-8 text-center">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">No Results Found</h3>
-        <p className="text-gray-600">{emptyMessage}</p>
+      <div className="notebook-panel p-8 text-center">
+        <h3 className="text-xl font-semibold text-[var(--color-ink)] mb-2">No Results Found</h3>
+        <p className="text-[var(--color-muted)]">{emptyMessage}</p>
       </div>
     );
   }
