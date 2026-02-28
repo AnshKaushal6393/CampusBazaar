@@ -23,7 +23,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="surface-card rounded-lg overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="pin-card rounded-lg overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
       <Link to={`/products/${product.id}`} className="block">
         <div className="relative h-48 overflow-hidden">
           <img
@@ -45,6 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </Link>
 
       <div className="p-4">
+        <span className="sticker mb-2">{product.isFree ? 'Free Pickup' : 'Campus Deal'}</span>
         <div className="flex justify-between items-start mb-1">
           <h3 className="text-lg font-semibold line-clamp-1 text-[var(--color-ink)]">
             <Link to={`/products/${product.id}`} className="hover:text-[var(--color-brand)] transition-colors">

@@ -74,7 +74,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const otherParticipant = getOtherParticipant();
 
   return (
-    <div className="flex flex-col h-full note-card overflow-hidden">
+    <div className="flex flex-col h-full pin-card overflow-hidden">
       {/* Chat Header */}
       <div className="flex items-center justify-between p-4 border-b border-[var(--color-border)] bg-[var(--color-brand-soft)]/40">
         <div className="flex items-center space-x-3">

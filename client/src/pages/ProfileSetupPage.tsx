@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useAuth } from '../context/useAuth';
+import CampusDoodle from '../components/common/CampusDoodle';
 
 const ProfileSetupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -36,24 +37,38 @@ const ProfileSetupPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <ShoppingBag className="h-12 w-12 text-emerald-600" />
+    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <div className="brand-gradient rounded-3xl p-8 text-white relative overflow-hidden hidden lg:flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <CampusDoodle variant="leaf" className="w-8 h-8 text-white/90" />
+              <span className="accent-pill">Profile Trust Boost</span>
+            </div>
+            <h2 className="text-4xl font-extrabold mt-6 leading-tight">Complete your profile to unlock faster responses.</h2>
+            <p className="text-white/85 mt-4">Students are more likely to chat and close deals with verified-looking profiles.</p>
+          </div>
+          <div className="pin-card p-4 text-[var(--color-ink)]">
+            <p className="text-sm font-semibold">Checklist: college, phone, pickup area.</p>
+          </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Complete Your Profile
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Please provide additional information to complete your profile
-        </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="notebook-panel py-8 px-4 sm:px-10">
+          <div className="flex items-center gap-2 text-[var(--color-brand)]">
+            <ShoppingBag className="h-7 w-7" />
+            <p className="paper-tag">Complete Profile</p>
+          </div>
+          <h2 className="mt-3 text-3xl font-extrabold text-[var(--color-ink)]">
+            Your campus identity
+          </h2>
+          <p className="mt-2 text-sm text-[var(--color-muted)]">
+            Add details that help fellow students trust your listings.
+          </p>
+          <div className="scribble-divider mt-3" />
+
+          <form className="space-y-6 mt-4" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="college" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="college" className="block text-sm font-medium text-[var(--color-ink)]">
                 College/University *
               </label>
               <div className="mt-1">
@@ -64,13 +79,13 @@ const ProfileSetupPage: React.FC = () => {
                   required
                   value={formData.college}
                   onChange={(e) => setFormData(prev => ({ ...prev, college: e.target.value }))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="campus-input"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-[var(--color-ink)]">
                 Phone Number *
               </label>
               <div className="mt-1">
@@ -81,13 +96,13 @@ const ProfileSetupPage: React.FC = () => {
                   required
                   value={formData.phoneNumber}
                   onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="campus-input"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="address" className="block text-sm font-medium text-[var(--color-ink)]">
                 Address
               </label>
               <div className="mt-1">
@@ -97,7 +112,7 @@ const ProfileSetupPage: React.FC = () => {
                   rows={3}
                   value={formData.address}
                   onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
+                  className="campus-input"
                 />
               </div>
             </div>

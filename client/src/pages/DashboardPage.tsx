@@ -8,6 +8,7 @@ import { useAuth } from '../context/useAuth';
 import { useProducts } from '../context/useProducts';
 import { useChat } from '../context/useChat';
 import { Product } from '../types';
+import CampusDoodle from '../components/common/CampusDoodle';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -42,7 +43,10 @@ const DashboardPage: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <p className="campus-kicker mb-2">Your Marketplace Hub</p>
+            <div className="flex items-center gap-2 mb-2 text-[var(--color-brand)]">
+              <CampusDoodle variant="leaf" className="w-6 h-6" />
+              <p className="campus-kicker">Your Marketplace Hub</p>
+            </div>
             <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">
               Welcome back, {user?.name?.split(' ')[0] || 'User'}!
             </h1>

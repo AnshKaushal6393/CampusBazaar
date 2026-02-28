@@ -49,7 +49,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col note-card overflow-hidden">
+    <div className="w-full h-full flex flex-col pin-card overflow-hidden">
       {/* Search and New Message */}
       <div className="p-4 border-b border-[var(--color-border)]">
         <div className="relative mb-4">

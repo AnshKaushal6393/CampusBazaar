@@ -8,6 +8,7 @@ import { useProducts } from '../context/useProducts';
 import { useAuth } from '../context/useAuth';
 import { useChat } from '../context/useChat';
 import { formatCurrency } from '../utils/formatCurrency';
+import CampusDoodle from '../components/common/CampusDoodle';
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -68,9 +69,9 @@ const ProductDetailPage: React.FC = () => {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Product Not Found</h1>
-          <p className="text-gray-600 mt-2">This listing may have been removed.</p>
-          <Link to="/products" className="inline-block mt-4 text-emerald-600 hover:text-emerald-700 font-medium">
+          <h1 className="text-2xl font-bold text-[var(--color-ink)]">Product Not Found</h1>
+          <p className="text-[var(--color-muted)] mt-2">This listing may have been removed.</p>
+          <Link to="/products" className="inline-block mt-4 text-[var(--color-brand)] hover:text-[var(--color-brand-strong)] font-medium">
             Back to products
           </Link>
         </div>
@@ -86,20 +87,24 @@ const ProductDetailPage: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center gap-2 text-[var(--color-brand)] mb-4">
+          <CampusDoodle variant="deal" className="w-7 h-7" />
+          <span className="paper-tag">Listing Detail</span>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="pin-card rounded-lg overflow-hidden">
             <img src={primaryImage} alt={product.title} className="w-full h-[420px] object-cover" />
           </div>
 
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{product.title}</h1>
-              <p className="text-2xl font-semibold text-emerald-600 mt-2">
+              <h1 className="text-3xl font-bold text-[var(--color-ink)]">{product.title}</h1>
+              <p className="text-2xl font-semibold text-[var(--color-brand)] mt-2">
                 {product.isFree ? 'FREE' : formatCurrency(product.price)}
               </p>
             </div>
 
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-4 text-sm text-[var(--color-muted)]">
               <span className="inline-flex items-center">
                 <Tag className="h-4 w-4 mr-1" />
                 <span className="capitalize">{product.category}</span>
@@ -110,12 +115,12 @@ const ProductDetailPage: React.FC = () => {
               </span>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-5">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
-              <p className="text-gray-700 leading-relaxed">{product.description}</p>
+            <div className="notebook-panel p-5">
+              <h2 className="text-lg font-semibold text-[var(--color-ink)] mb-2">Description</h2>
+              <p className="text-[var(--color-muted)] leading-relaxed">{product.description}</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-5 flex items-center justify-between">
+            <div className="pin-card p-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img
                   src={
@@ -126,8 +131,8 @@ const ProductDetailPage: React.FC = () => {
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
-                  <p className="font-medium text-gray-900">{product.seller.name}</p>
-                  <p className="text-sm text-gray-600">{product.college}</p>
+                  <p className="font-medium text-[var(--color-ink)]">{product.seller.name}</p>
+                  <p className="text-sm text-[var(--color-muted)]">{product.college}</p>
                 </div>
               </div>
 

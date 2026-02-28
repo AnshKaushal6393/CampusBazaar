@@ -6,6 +6,7 @@ import ChatInterface from '../components/messaging/ChatInterface';
 import { useChat } from '../context/useChat';
 import { useAuth } from '../context/useAuth';
 import { Conversation } from '../types';
+import CampusDoodle from '../components/common/CampusDoodle';
 
 const MessagesPage: React.FC = () => {
   const location = useLocation();
@@ -39,9 +40,13 @@ const MessagesPage: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <p className="paper-tag mb-2">Campus Thread</p>
+        <div className="flex items-center gap-2 mb-2 text-[var(--color-brand)]">
+          <CampusDoodle variant="chat" className="w-7 h-7" />
+          <p className="paper-tag">Campus Thread</p>
+        </div>
         <h1 className="text-3xl font-bold text-[var(--color-ink)] mb-2">Messages</h1>
         <p className="text-[var(--color-muted)] mb-6">Coordinate meetups and item details directly with students.</p>
+        <div className="scribble-divider mb-4" />
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(80vh-4rem)]">
           <div className="lg:col-span-1 h-full">
